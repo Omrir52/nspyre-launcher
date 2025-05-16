@@ -1,41 +1,52 @@
 import subprocess
+import tempfile
 
+def create_temp_ps1(script_content):
+    """Creates a temporary .ps1 file with the given content."""
+    temp = tempfile.NamedTemporaryFile(delete=False, suffix='.ps1', mode='w', encoding='utf-8')
+    temp.write(script_content)
+    temp.close()
+    return temp.name
 
 def open_command_prompts():
-    """
-    Opens three command prompt windows which open theinsrument server, dataserver, and run nspyre.
-    """
-    # Path to the Python interpreter of the virtual environment
-    python_interpreter = "C:\\Users\\USER\\anaconda3\\envs\\nspyre\\python.exe"
+    # Configuration
+    env_name = "nspyre"
+    python_path = r"C:\Users\USER\miniforge3\envs\nspyre\python.exe"
+    inst_server = r"C:\Users\USER\Python\nspyre\template\src\template\drivers\local_inserv.py"
+    gui_dir = r"C:\Users\USER\Python\nspyre\template\src\template\gui"
+    gui_file = "app.py"
 
-    # Name of environment with nspyre
-    environment_name = "nspyre"
+    # First tab: instrument server
+    script1 = create_temp_ps1(f"""
+conda activate {env_name}
+{python_path} "{inst_server}"
+""")
 
-    # Path to conda.bat
-    conda_bat_path = "C:\\Users\\USER\\anaconda3\\condabin\\conda.bat"
+    # Second tab: data server
+    script2 = create_temp_ps1(f"""
+conda activate {env_name}
+nspyre-dataserv
+""")
 
-    # Path to instrument server
-    inst_serv_path = "C:\\Users\\USER\\anaconda3\\envs\\nspyre\\Lib\\site-packages\\nspyre\\nspyre_template\\src\\template\\drivers\\local_inserv.py"
+    # Third tab: GUI (wait 5 seconds first)
+    script3 = create_temp_ps1(f"""
+Start-Sleep -Seconds 3
+conda activate {env_name}
+cd "{gui_dir}"
+{python_path} "{gui_file}"
+""")
 
-    # Path to gui file
-    app_gui_name = "app.py"
-
-    # Path to gui directory
-    gui_directory_path = "C:\\Users\\USER\\anaconda3\\envs\\nspyre\\Lib\\site-packages\\nspyre\\nspyre_template\\src\\template\\gui"
-
-    # Commands to run
-    commands = [
-        f"{python_interpreter} {inst_serv_path}",
-        f"call {conda_bat_path} activate {
-            environment_name} && {"nspyre-dataserv"}",
-        f"cd {gui_directory_path} && {python_interpreter} {app_gui_name}"
+    # Windows Terminal command
+    wt_command = [
+        "wt",
+        "powershell", "-NoExit", "-File", script1,
+        ";", "new-tab",
+        "powershell", "-NoExit", "-File", script2,
+        ";", "new-tab",
+        "powershell", "-NoExit", "-File", script3,
     ]
 
-    for command in commands:
-        # Open a new command prompt window and run the specified command
-        subprocess.Popen(["cmd.exe", "/K", command],
-                         creationflags=subprocess.CREATE_NEW_CONSOLE)
-
+    subprocess.Popen(wt_command)
 
 if __name__ == "__main__":
     open_command_prompts()

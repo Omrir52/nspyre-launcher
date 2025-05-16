@@ -1,0 +1,16 @@
+nspyre.spec
+build/nspyre/Analysis-00.toc
+build/nspyre/EXE-00.toc
+build/nspyre/PKG-00.toc
+build/nspyre/warn-nspyre.txt
+build/nspyre/base_library.zip
+build/nspyre/nspyre.pkg
+build/nspyre/PYZ-00.pyz
+build/nspyre/xref-nspyre.html
+build/nspyre/PYZ-00.toc
+build/nspyre/localpycs/pyimod01_archive.pyc
+build/nspyre/localpycs/pyimod04_pywin32.pyc
+build/nspyre/localpycs/pyimod02_importers.pyc
+build/nspyre/localpycs/struct.pyc
+dist/nspyre.exe
+build/nspyre/localpycs/pyimod03_ctypes.pyc
