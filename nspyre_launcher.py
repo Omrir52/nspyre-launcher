@@ -12,14 +12,16 @@ def open_command_prompts():
     # Configuration
     env_name = "nspyre"
     python_path = r"C:\Users\USER\miniforge3\envs\nspyre\python.exe"
-    inst_server = r"C:\Users\USER\Python\nspyre\template\src\template\drivers\local_inserv.py"
+    inserv_dir = r"C:\Users\USER\Python\nspyre\template\src\template\drivers"
+    inserv_file = "local_inserv.py"
     gui_dir = r"C:\Users\USER\Python\nspyre\template\src\template\gui"
     gui_file = "app.py"
 
     # First tab: instrument server
     script1 = create_temp_ps1(f"""
 conda activate {env_name}
-{python_path} "{inst_server}"
+cd "{inserv_dir}"
+{python_path} "{inserv_file}"
 """)
 
     # Second tab: data server
@@ -28,7 +30,7 @@ conda activate {env_name}
 nspyre-dataserv
 """)
 
-    # Third tab: GUI (wait 5 seconds first)
+    # Third tab: GUI (wait 3 seconds first)
     script3 = create_temp_ps1(f"""
 Start-Sleep -Seconds 3
 conda activate {env_name}
